@@ -1,11 +1,12 @@
 import React from "react";
 import { NavLink } from "react-router";
-import { LightBulbIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
+// import { LightBulbIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
+import { FanIcon, LightbulbIcon  } from "lucide-react";
 
 const Sidebar = () => {
   const navItems = [
-    { name: "Light", path: "/light", icon: LightBulbIcon },
-    { name: "Fan", path: "/fan", icon: Cog6ToothIcon },
+    { name: "Light", path: "/light", icon: LightbulbIcon },
+    { name: "Fan", path: "/fan", icon: FanIcon },
   ];
 
   return (
