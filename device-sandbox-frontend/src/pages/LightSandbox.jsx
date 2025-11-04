@@ -1,7 +1,9 @@
-export default function LightSandbox() {
+const LightSandbox = () => {
   return (
     <div className="flex flex-col items-center justify-center h-full text-gray-400">
       <p className="text-sm">💡 Light control coming soon!</p>
     </div>
   );
-}
+};
+
+export default LightSandbox;

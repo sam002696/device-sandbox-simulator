@@ -12,7 +12,7 @@ const Sidebar = () => {
   return (
     <aside className="w-56 bg-[#0b111e] border-r border-white/5 flex flex-col p-4">
       <h2 className="text-sm  tracking-wide text-gray-400 mb-3">Devices</h2>
-      <div className="space-y-2">
+      <div className="space-y-4">
         {navItems.map((item) => (
           <NavLink
             key={item.name}

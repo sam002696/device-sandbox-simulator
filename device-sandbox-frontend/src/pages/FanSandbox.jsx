@@ -1,7 +1,11 @@
-export default function FanSandbox() {
+import FanCanvas from "../components/fan/FanCanvas";
+
+const FanSandbox = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full text-gray-400">
-      <p className="text-sm">💨 Fan control coming soon!</p>
+    <div className="h-full w-full flex items-center justify-center">
+      <FanCanvas />
     </div>
   );
-}
+};
+
+export default FanSandbox;
