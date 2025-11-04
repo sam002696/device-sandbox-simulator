@@ -1,7 +1,9 @@
+import LightCanvas from "../components/light/LightCanvas";
+
 const LightSandbox = () => {
   return (
-    <div className="flex flex-col items-center justify-center h-full text-gray-400">
-      <p className="text-sm">💡 Light control coming soon!</p>
+    <div className="flex flex-col items-center justify-center h-full ">
+      <LightCanvas />
     </div>
   );
 };
