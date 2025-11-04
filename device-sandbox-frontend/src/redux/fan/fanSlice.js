@@ -1,20 +1,11 @@
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { createDeviceBase } from "../shared/deviceSliceBase";
 
-const initialState = {
-  isOn: false,
-  speed: 0,
-  showActions: false,
-  showModal: false,
-  presets: [],
-  activePresetId: null,
-  activeTab: "",
-  toast: null,
-};
-
-const fanSlice = createSlice({
-  name: "fan",
-  initialState,
-  reducers: {
+const { baseInitialState, baseReducers } = createDeviceBase(
+  {
+    speed: 0,
+  },
+  {
     togglePower: (state) => {
       state.isOn = !state.isOn;
       if (!state.isOn) {
@@ -32,25 +23,13 @@ const fanSlice = createSlice({
       state.showActions = false;
       state.activePresetId = null;
     },
-    openModal: (state) => {
-      state.showModal = true;
-    },
-    closeModal: (state) => {
-      state.showModal = false;
-    },
 
+    // extend savePreset to apply fan settings
     savePreset: {
       reducer(state, action) {
         const { id, name, settings } = action.payload;
-
-        // push new preset
-        const newPreset = { id, name, settings };
-        state.presets.push(newPreset);
-
-        // close modal
+        state.presets.push({ id, name, settings });
         state.showModal = false;
-
-        // immediately apply new preset
         state.isOn = settings.power;
         state.speed = settings.speed;
         state.showActions = state.isOn && state.speed > 0;
@@ -58,13 +37,7 @@ const fanSlice = createSlice({
         state.activeTab = "savedPreset";
       },
       prepare(name, settings) {
-        return {
-          payload: {
-            id: nanoid(),
-            name,
-            settings,
-          },
-        };
+        return { payload: { id: crypto.randomUUID(), name, settings } };
       },
     },
 
@@ -74,22 +47,17 @@ const fanSlice = createSlice({
         state.isOn = preset.settings.power;
         state.speed = preset.settings.speed;
         state.showActions = state.isOn && state.speed > 0;
-
         state.activePresetId = preset.id;
         state.activeTab = "savedPreset";
       }
     },
-    setActiveTab: (state, action) => {
-      state.activeTab = action.payload; // e.g. "fan" or "savedPreset"
-    },
+  }
+);
 
-    showToast: (state, action) => {
-      state.toast = action.payload; // message string
-    },
-    hideToast: (state) => {
-      state.toast = null;
-    },
-  },
+const fanSlice = createSlice({
+  name: "fan",
+  initialState: baseInitialState,
+  reducers: baseReducers,
 });
 
 export const {

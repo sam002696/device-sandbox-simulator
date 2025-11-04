@@ -2,11 +2,15 @@ import { NavLink, useNavigate } from "react-router";
 import { FanIcon, LightbulbIcon } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { applyPreset, setActiveTab } from "../../redux/fan/fanSlice";
+import {
+  applyPreset as applyLightPreset,
+  setActiveTab as setLightTab,
+} from "../../redux/light/lightSlice";
 
-const Sidebar = () => {
+const Sidebar = ({ isFan, slice }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { presets, activePresetId } = useSelector((state) => state.fan);
+  const { presets, activePresetId } = useSelector((state) => state[slice]);
 
   const navItems = [
     { name: "Light", path: "/light", icon: LightbulbIcon },
@@ -14,14 +18,21 @@ const Sidebar = () => {
   ];
 
   const handlePresetClick = (preset) => {
-    dispatch(applyPreset(preset));
-    navigate("/fan");
-    dispatch(setActiveTab("savedPreset"));
+    if (isFan) {
+      dispatch(applyPreset(preset));
+      dispatch(setActiveTab("savedPreset"));
+      navigate("/fan");
+    } else {
+      dispatch(applyLightPreset(preset));
+      dispatch(setLightTab("savedPreset"));
+      navigate("/light");
+    }
   };
 
   return (
     <aside className="w-56 bg-[#0b111e] border-r border-white/5 flex flex-col p-4">
       <h2 className="text-sm tracking-wide text-gray-400 mb-3">Devices</h2>
+
       <div className="space-y-4">
         {navItems.map((item) => (
           <NavLink
@@ -56,12 +67,11 @@ const Sidebar = () => {
               <li
                 key={preset.id}
                 onClick={() => handlePresetClick(preset)}
-                className={`cursor-pointer border border-white/5 px-3 py-2 rounded-lg text-sm transition
-                  ${
-                    preset.id === activePresetId
-                      ? "bg-[#364153] text-white"
-                      : "text-gray-300 hover:bg-[#1E2939] hover:text-white"
-                  }`}
+                className={`cursor-pointer border border-white/5 px-3 py-2 rounded-lg text-sm transition ${
+                  preset.id === activePresetId
+                    ? "bg-[#364153] text-white"
+                    : "text-gray-300 hover:bg-[#1E2939] hover:text-white"
+                }`}
               >
                 <div className="flex justify-between items-center">
                   <span>{preset.name}</span>

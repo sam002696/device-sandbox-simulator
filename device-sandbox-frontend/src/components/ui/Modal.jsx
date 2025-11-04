@@ -1,24 +1,54 @@
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal, savePreset, showToast } from "../../redux/fan/fanSlice";
 import { useState } from "react";
 
-const Modal = () => {
+import {
+  closeModal as closeFanModal,
+  savePreset as saveFanPreset,
+  showToast as showFanToast,
+} from "../../redux/fan/fanSlice";
+
+import {
+  closeModal as closeLightModal,
+  savePreset as saveLightPreset,
+  showToast as showLightToast,
+} from "../../redux/light/lightSlice";
+
+const Modal = ({ slice = "fan" }) => {
   const dispatch = useDispatch();
-  const { isOn, speed } = useSelector((state) => state.fan);
+  const deviceState = useSelector((state) => state[slice]);
   const [name, setName] = useState("");
 
   const handleSave = () => {
-    if (name.trim() !== "") {
+    if (name.trim() === "") return;
+
+    if (slice === "fan") {
       dispatch(
-        savePreset(name, {
-          power: isOn,
-          speed: speed,
+        saveFanPreset(name, {
+          power: deviceState.isOn,
+          speed: deviceState.speed,
         })
       );
-      setName("");
-      dispatch(showToast("Preset saved")); 
+      dispatch(showFanToast("Preset saved"));
+      dispatch(closeFanModal());
+    } else {
+      dispatch(
+        saveLightPreset(name, {
+          power: deviceState.isOn,
+          brightness: deviceState.brightness,
+          color: deviceState.color,
+        })
+      );
+      dispatch(showLightToast("Preset saved"));
+      dispatch(closeLightModal());
     }
+
+    setName("");
   };
+
+  const handleClose =
+    slice === "fan"
+      ? () => dispatch(closeFanModal())
+      : () => dispatch(closeLightModal());
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
@@ -38,7 +68,7 @@ const Modal = () => {
 
         <div className="flex justify-end gap-3">
           <button
-            onClick={() => dispatch(closeModal())}
+            onClick={handleClose}
             className="px-4 py-2 text-sm rounded-md bg-gray-600 hover:bg-gray-700"
           >
             Cancel

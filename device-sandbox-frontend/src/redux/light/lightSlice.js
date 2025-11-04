@@ -1,22 +1,12 @@
-// src/redux/light/lightSlice.js
-import { createSlice, nanoid } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { createDeviceBase } from "../shared/deviceSliceBase";
 
-const initialState = {
-  isOn: false,
-  brightness: 0,
-  color: "#FFD580", // default color (warm white)
-  showActions: false,
-  showModal: false,
-  presets: [],
-  activePresetId: null,
-  activeTab: "",
-  toast: null,
-};
-
-const lightSlice = createSlice({
-  name: "light",
-  initialState,
-  reducers: {
+const { baseInitialState, baseReducers } = createDeviceBase(
+  {
+    brightness: 0,
+    color: "#FFD580",
+  },
+  {
     togglePower: (state) => {
       state.isOn = !state.isOn;
       if (!state.isOn) {
@@ -38,21 +28,12 @@ const lightSlice = createSlice({
       state.showActions = false;
       state.activePresetId = null;
     },
-    openModal: (state) => {
-      state.showModal = true;
-    },
-    closeModal: (state) => {
-      state.showModal = false;
-    },
 
     savePreset: {
       reducer(state, action) {
         const { id, name, settings } = action.payload;
-        const newPreset = { id, name, settings };
-        state.presets.push(newPreset);
+        state.presets.push({ id, name, settings });
         state.showModal = false;
-
-        // Apply new preset instantly
         state.isOn = settings.power;
         state.brightness = settings.brightness;
         state.color = settings.color;
@@ -61,13 +42,7 @@ const lightSlice = createSlice({
         state.activeTab = "savedPreset";
       },
       prepare(name, settings) {
-        return {
-          payload: {
-            id: nanoid(),
-            name,
-            settings,
-          },
-        };
+        return { payload: { id: crypto.randomUUID(), name, settings } };
       },
     },
 
@@ -82,18 +57,13 @@ const lightSlice = createSlice({
         state.activeTab = "savedPreset";
       }
     },
+  }
+);
 
-    setActiveTab: (state, action) => {
-      state.activeTab = action.payload;
-    },
-
-    showToast: (state, action) => {
-      state.toast = action.payload;
-    },
-    hideToast: (state) => {
-      state.toast = null;
-    },
-  },
+const lightSlice = createSlice({
+  name: "light",
+  initialState: baseInitialState,
+  reducers: baseReducers,
 });
 
 export const {
