@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { closeModal, savePreset } from "../../redux/fan/fanSlice";
+import { closeModal, savePreset, showToast } from "../../redux/fan/fanSlice";
 import { useState } from "react";
 
 const Modal = () => {
@@ -16,6 +16,7 @@ const Modal = () => {
         })
       );
       setName("");
+      dispatch(showToast("Preset saved")); 
     }
   };
 

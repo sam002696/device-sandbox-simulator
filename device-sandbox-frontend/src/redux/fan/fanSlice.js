@@ -8,6 +8,7 @@ const initialState = {
   presets: [],
   activePresetId: null,
   activeTab: "",
+  toast: null,
 };
 
 const fanSlice = createSlice({
@@ -81,6 +82,13 @@ const fanSlice = createSlice({
     setActiveTab: (state, action) => {
       state.activeTab = action.payload; // e.g. "fan" or "savedPreset"
     },
+
+    showToast: (state, action) => {
+      state.toast = action.payload; // message string
+    },
+    hideToast: (state) => {
+      state.toast = null;
+    },
   },
 });
 
@@ -93,6 +101,8 @@ export const {
   savePreset,
   applyPreset,
   setActiveTab,
+  showToast,
+  hideToast,
 } = fanSlice.actions;
 
 export default fanSlice.reducer;
