@@ -1,6 +1,4 @@
-import React from "react";
-
-const LightSwitch = ({ isOn, toggle }) => {
+const DeviceSwitch = ({ isOn, toggle }) => {
   return (
     <button
       onClick={toggle}
@@ -15,4 +13,4 @@ const LightSwitch = ({ isOn, toggle }) => {
   );
 };
 
-export default LightSwitch;
+export default DeviceSwitch;

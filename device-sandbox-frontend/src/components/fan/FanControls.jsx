@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { togglePower, setSpeed } from "../../redux/fan/fanSlice";
-import FanSwitch from "./FanSwitch";
+import DeviceSwitch from "../ui/DeviceSwitch";
 
 const FanControls = () => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const FanControls = () => {
       {/* Power toggle */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-gray-300">Power</span>
-        <FanSwitch isOn={isOn} toggle={() => dispatch(togglePower())} />
+        <DeviceSwitch isOn={isOn} toggle={() => dispatch(togglePower())} />
       </div>
 
       {/* Speed slider */}

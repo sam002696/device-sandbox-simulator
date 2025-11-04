@@ -5,15 +5,22 @@ import LightSandbox from "./pages/LightSandbox";
 import WelcomeScreen from "./pages/WelcomeScreen";
 import NotFound from "./pages/NotFound";
 import { useDispatch, useSelector } from "react-redux";
-import { hideToast } from "./redux/fan/fanSlice";
 import Toast from "./components/ui/Toast";
+import { hideToast } from "./redux/shared/toastSlice";
 
 function App() {
-  const { toast } = useSelector((state) => state.fan);
+  const { message, type, source } = useSelector((state) => state.toast);
   const dispatch = useDispatch();
   return (
     <Router>
-      {toast && <Toast message={toast} onClose={() => dispatch(hideToast())} />}
+      {message && (
+        <Toast
+          message={message}
+          type={type}
+          source={source}
+          onClose={() => dispatch(hideToast())}
+        />
+      )}
       <Routes>
         <Route path="/" element={<Sandbox />}>
           <Route index element={<WelcomeScreen />} />

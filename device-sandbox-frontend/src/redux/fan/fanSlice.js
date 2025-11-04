@@ -69,8 +69,6 @@ export const {
   savePreset,
   applyPreset,
   setActiveTab,
-  showToast,
-  hideToast,
 } = fanSlice.actions;
 
 export default fanSlice.reducer;

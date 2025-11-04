@@ -76,8 +76,6 @@ export const {
   savePreset,
   applyPreset,
   setActiveTab,
-  showToast,
-  hideToast,
 } = lightSlice.actions;
 
 export default lightSlice.reducer;

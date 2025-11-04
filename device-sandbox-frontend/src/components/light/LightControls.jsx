@@ -4,7 +4,7 @@ import {
   setBrightness,
   setColor,
 } from "../../redux/light/lightSlice";
-import LightSwitch from "./LightSwitch";
+import DeviceSwitch from "../ui/DeviceSwitch";
 
 
 const LightControls = () => {
@@ -24,7 +24,7 @@ const LightControls = () => {
       {/* Power toggle */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-gray-300">Power</span>
-        <LightSwitch isOn={isOn} toggle={() => dispatch(togglePower())} />
+        <DeviceSwitch isOn={isOn} toggle={() => dispatch(togglePower())} />
       </div>
 
       {/* Color Temperature */}

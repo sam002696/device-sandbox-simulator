@@ -4,14 +4,13 @@ import { useState } from "react";
 import {
   closeModal as closeFanModal,
   savePreset as saveFanPreset,
-  showToast as showFanToast,
 } from "../../redux/fan/fanSlice";
 
 import {
   closeModal as closeLightModal,
   savePreset as saveLightPreset,
-  showToast as showLightToast,
 } from "../../redux/light/lightSlice";
+import { showToast } from "../../redux/shared/toastSlice";
 
 const Modal = ({ slice = "fan" }) => {
   const dispatch = useDispatch();
@@ -28,7 +27,7 @@ const Modal = ({ slice = "fan" }) => {
           speed: deviceState.speed,
         })
       );
-      dispatch(showFanToast("Preset saved"));
+      dispatch(showToast({ message: "Preset saved", type: "success", source: slice }));
       dispatch(closeFanModal());
     } else {
       dispatch(
@@ -38,7 +37,7 @@ const Modal = ({ slice = "fan" }) => {
           color: deviceState.color,
         })
       );
-      dispatch(showLightToast("Preset saved"));
+      dispatch(showToast({ message: "Preset saved", type: "success", source: slice }));
       dispatch(closeLightModal());
     }
 

@@ -4,7 +4,10 @@ import { nanoid } from "@reduxjs/toolkit";
  * Base slice factory for device types (fan, light, etc.)
  * It returns reusable reducers + initial state
  */
-export const createDeviceBase = (extraInitialState = {}, customReducers = {}) => {
+export const createDeviceBase = (
+  extraInitialState = {},
+  customReducers = {}
+) => {
   const baseInitialState = {
     isOn: false,
     showActions: false,
@@ -12,7 +15,6 @@ export const createDeviceBase = (extraInitialState = {}, customReducers = {}) =>
     presets: [],
     activePresetId: null,
     activeTab: "",
-    toast: null,
     ...extraInitialState,
   };
 
@@ -25,12 +27,6 @@ export const createDeviceBase = (extraInitialState = {}, customReducers = {}) =>
     },
     setActiveTab: (state, action) => {
       state.activeTab = action.payload;
-    },
-    showToast: (state, action) => {
-      state.toast = action.payload;
-    },
-    hideToast: (state) => {
-      state.toast = null;
     },
 
     savePreset: {
