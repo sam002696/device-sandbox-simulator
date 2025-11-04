@@ -1,9 +1,23 @@
-import { useDispatch } from "react-redux";
-import { closeModal } from "../../redux/fan/fanSlice";
-
+import { useDispatch, useSelector } from "react-redux";
+import { closeModal, savePreset } from "../../redux/fan/fanSlice";
+import { useState } from "react";
 
 const Modal = () => {
   const dispatch = useDispatch();
+  const { isOn, speed } = useSelector((state) => state.fan);
+  const [name, setName] = useState("");
+
+  const handleSave = () => {
+    if (name.trim() !== "") {
+      dispatch(
+        savePreset(name, {
+          power: isOn,
+          speed: speed,
+        })
+      );
+      setName("");
+    }
+  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
@@ -16,6 +30,8 @@ const Modal = () => {
         <input
           type="text"
           placeholder="Name it"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
           className="w-full p-2 rounded-md bg-[#1E2939] text-gray-200 outline-none mb-4"
         />
 
@@ -27,7 +43,7 @@ const Modal = () => {
             Cancel
           </button>
           <button
-            onClick={() => dispatch(closeModal())}
+            onClick={handleSave}
             className="px-4 py-2 text-sm rounded-md bg-blue-600 hover:bg-blue-700"
           >
             Save Preset

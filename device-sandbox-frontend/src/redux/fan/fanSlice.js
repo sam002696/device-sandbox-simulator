@@ -1,10 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 const initialState = {
   isOn: false,
-  speed: 64,
-  showActions: false, // for Topbar buttons visibility
-  showModal: false, // for save preset modal
+  speed: 0,
+  showActions: false,
+  showModal: false,
+  presets: [],
+  activePresetId: null,
+  activeTab: "",
 };
 
 const fanSlice = createSlice({
@@ -26,6 +29,7 @@ const fanSlice = createSlice({
       state.isOn = false;
       state.speed = 0;
       state.showActions = false;
+      state.activePresetId = null;
     },
     openModal: (state) => {
       state.showModal = true;
@@ -33,10 +37,62 @@ const fanSlice = createSlice({
     closeModal: (state) => {
       state.showModal = false;
     },
+
+    savePreset: {
+      reducer(state, action) {
+        const { id, name, settings } = action.payload;
+
+        // push new preset
+        const newPreset = { id, name, settings };
+        state.presets.push(newPreset);
+
+        // close modal
+        state.showModal = false;
+
+        // immediately apply new preset
+        state.isOn = settings.power;
+        state.speed = settings.speed;
+        state.showActions = state.isOn && state.speed > 0;
+        state.activePresetId = id;
+        state.activeTab = "savedPreset";
+      },
+      prepare(name, settings) {
+        return {
+          payload: {
+            id: nanoid(),
+            name,
+            settings,
+          },
+        };
+      },
+    },
+
+    applyPreset: (state, action) => {
+      const preset = action.payload;
+      if (preset) {
+        state.isOn = preset.settings.power;
+        state.speed = preset.settings.speed;
+        state.showActions = state.isOn && state.speed > 0;
+
+        state.activePresetId = preset.id;
+        state.activeTab = "savedPreset";
+      }
+    },
+    setActiveTab: (state, action) => {
+      state.activeTab = action.payload; // e.g. "fan" or "savedPreset"
+    },
   },
 });
 
-export const { togglePower, setSpeed, clearFan, openModal, closeModal } =
-  fanSlice.actions;
+export const {
+  togglePower,
+  setSpeed,
+  clearFan,
+  openModal,
+  closeModal,
+  savePreset,
+  applyPreset,
+  setActiveTab,
+} = fanSlice.actions;
 
 export default fanSlice.reducer;
