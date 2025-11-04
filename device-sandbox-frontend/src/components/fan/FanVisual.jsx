@@ -1,11 +1,13 @@
 import { useMemo } from "react";
-import fanImg from "../../assets/fan.png"; // your central fan image
+import { useSelector } from "react-redux";
+import fanImg from "../../assets/fan.png"; // central fan image
 
-const FanVisual = ({ isOn, speed }) => {
+const FanVisual = () => {
+  const { isOn, speed } = useSelector((state) => state.fan);
+
   const spinSpeed = useMemo(() => {
-    // Map 0–100% → CSS animation duration (slower = higher duration)
-    const minDuration = 0.5; // seconds (fast)
-    const maxDuration = 5;   // seconds (slow)
+    const minDuration = 0.5; // fast
+    const maxDuration = 5;   // slow
     const duration = maxDuration - (speed / 100) * (maxDuration - minDuration);
     return `${duration}s`;
   }, [speed]);
