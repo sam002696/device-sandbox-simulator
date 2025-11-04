@@ -6,9 +6,10 @@ const FanVisual = () => {
   const { isOn, speed } = useSelector((state) => state.fan);
 
   const spinSpeed = useMemo(() => {
-    const minDuration = 0.5; // fast
-    const maxDuration = 5; // slow
-    const duration = maxDuration - (speed / 100) * (maxDuration - minDuration);
+    const minDuration = 0.5;
+    const maxDuration = 5;
+    const normalized = Math.pow(speed / 100, 0.7); 
+    const duration = maxDuration - normalized * (maxDuration - minDuration);
     return `${duration}s`;
   }, [speed]);
 
@@ -19,7 +20,7 @@ const FanVisual = () => {
       <img
         src={fanImg}
         alt="Fan"
-        className={`w-[200px] h-[200px] transition-all duration-500 ease-in-out ${
+        className={`transition-all duration-500 ease-in-out mb-20 ${
           shouldSpin ? "animate-spin" : ""
         }`}
         style={{

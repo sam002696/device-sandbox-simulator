@@ -30,7 +30,7 @@ const LightVisual = () => {
       <img
         src={isOn ? LightOn : LightOff}
         alt="Light Bulb"
-        className="relative z-10 transition-all duration-500 mb-15"
+        className="relative z-10 transition-all duration-500 mb-20"
         style={{
           filter: isOn ? `brightness(${1 + glow * 0.6})` : "brightness(0.5)",
         }}
