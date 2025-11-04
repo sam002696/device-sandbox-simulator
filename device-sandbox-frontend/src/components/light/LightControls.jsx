@@ -6,18 +6,11 @@ import {
 } from "../../redux/light/lightSlice";
 import DeviceSwitch from "../ui/DeviceSwitch";
 
-
 const LightControls = () => {
   const dispatch = useDispatch();
   const { isOn, brightness, color } = useSelector((state) => state.light);
 
-  const colorOptions = [
-    "#FFD580", // warm
-    "#FFF8DC", // soft white
-    "#CDE8FF", // cool white
-    "#C4D4F2", // daylight
-    "#EEC6D0", // pinkish
-  ];
+  const colorOptions = ["#FFE5B4", "#F0F8FF", "#87CEEB", "#FFB6C1"];
 
   return (
     <div className="bg-[#101828] border border-[#364153] rounded-xl p-5 w-[340px]">
@@ -29,14 +22,16 @@ const LightControls = () => {
 
       {/* Color Temperature */}
       <div className="mb-4">
-        <span className="text-sm text-gray-300 block mb-2">Color Temperature</span>
-        <div className="flex gap-2">
+        <span className="text-sm text-gray-300 block mb-2">
+          Color Temperature
+        </span>
+        <div className="flex  gap-2">
           {colorOptions.map((c) => (
             <button
               key={c}
               onClick={() => dispatch(setColor(c))}
               disabled={!isOn}
-              className={`w-8 h-8 rounded-md border-2 transition ${
+              className={`flex-1 h-10 rounded-md border-2 transition-all duration-200 ${
                 c === color ? "border-blue-400" : "border-transparent"
               }`}
               style={{

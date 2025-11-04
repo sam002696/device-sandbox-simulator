@@ -4,7 +4,7 @@ import { createDeviceBase } from "../shared/deviceSliceBase";
 const { baseInitialState, baseReducers } = createDeviceBase(
   {
     brightness: 0,
-    color: "#FFD580",
+    color: "#FFE5B4",
   },
   {
     togglePower: (state) => {
@@ -12,6 +12,7 @@ const { baseInitialState, baseReducers } = createDeviceBase(
       if (!state.isOn) {
         state.brightness = 0;
         state.showActions = false;
+        state.color = "#FFE5B4";
       }
     },
     setBrightness: (state, action) => {
@@ -27,6 +28,7 @@ const { baseInitialState, baseReducers } = createDeviceBase(
       state.brightness = 0;
       state.showActions = false;
       state.activePresetId = null;
+      state.color = "#FFE5B4";
     },
 
     savePreset: {

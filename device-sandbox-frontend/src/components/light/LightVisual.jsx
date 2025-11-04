@@ -7,8 +7,8 @@ const LightVisual = () => {
 
   // Brightness controls both glow radius & opacity
   const glow = brightness / 100;
-  const blurSize = 40 + glow * 80; // softer glow at higher brightness
-  const glowOpacity = 0.15 + glow * 0.5;
+  const blurSize = 30 + Math.pow(glow, 0.8) * 100; // softer curve
+  const glowOpacity = 0.1 + Math.pow(glow, 1.2) * 0.6; // faster brightening
 
   return (
     <div className="relative flex items-center justify-center transition-all duration-500">
