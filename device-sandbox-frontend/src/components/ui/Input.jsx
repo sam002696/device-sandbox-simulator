@@ -7,12 +7,16 @@ const Input = ({
   disabled = false,
   error = "",
   className = "",
+  required = false,
 }) => {
   return (
     <div className="flex flex-col w-full mb-4">
       {label && (
         <label className="text-sm text-gray-300 mb-2 font-medium">
-          {label}
+          {label}{" "}
+          {required && (
+            <span className="text-red-500 font-semibold">*</span>
+          )}
         </label>
       )}
 
@@ -22,6 +26,7 @@ const Input = ({
         value={value}
         onChange={onChange}
         disabled={disabled}
+        required={required}
         className={`w-full p-2 rounded-md bg-[#1E2939] text-gray-200 outline-none border border-transparent focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all duration-200 placeholder-gray-500 ${
           disabled ? "opacity-50 cursor-not-allowed" : ""
         } ${className}`}

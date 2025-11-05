@@ -50,6 +50,8 @@ const fanSlice = createSlice({
 
       // Optimistic pending: add temp + activate immediately
       .addCase(savePresetOptimistic("fan").pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
         const { tempId, name, settings } = action.meta.arg;
         const newPreset = { id: tempId, name, settings, isTemp: true };
 
@@ -66,6 +68,8 @@ const fanSlice = createSlice({
 
       //  Fulfilled: replacing temp with real backend version + keep active
       .addCase(savePresetOptimistic("fan").fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         const { tempId, preset } = action.payload || {};
         if (!preset || !preset.id) return;
 
@@ -78,6 +82,8 @@ const fanSlice = createSlice({
 
       //  Rollbacking if API fails
       .addCase(savePresetOptimistic("fan").rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.error || "Failed to save preset";
         const { tempId } = action.payload || {};
         state.presets = state.presets.filter((p) => p.id !== tempId);
         if (state.activePresetId === tempId) state.activePresetId = null;

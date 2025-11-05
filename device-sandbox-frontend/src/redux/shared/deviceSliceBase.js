@@ -15,6 +15,8 @@ export const createDeviceBase = (
     presets: [],
     activePresetId: null,
     activeTab: "",
+    loading: false,
+    error: null,
     ...extraInitialState,
   };
 

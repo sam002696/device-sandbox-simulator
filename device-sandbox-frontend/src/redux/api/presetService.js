@@ -28,13 +28,16 @@ export const createPreset = async (type, name, settings) => {
   const response = await axios.post(PRESET_SERVICE_API.CREATE, payload);
   const preset = response?.data?.data;
 
+    const normalized = {
+    id: preset.id,
+    name: preset.name,
+    type: preset.device?.type,
+    settings: preset.device?.settings || {},
+    createdAt: preset.created_at,
+  };
+
   return {
-    preset: {
-      id: preset.id,
-      name: preset.name,
-      type: preset.device?.type,
-      settings: preset.device?.settings || {},
-      createdAt: preset.created_at,
-    },
+    preset: normalized,
+    response: response?.data,
   };
 };

@@ -17,25 +17,32 @@ export const savePresetOptimistic = (deviceType) =>
     `${deviceType}/savePresetOptimistic`,
     async ({ tempId, name, settings }, { rejectWithValue, dispatch }) => {
       try {
-        const res = await createPreset(deviceType, name, settings);
+        const res = await createPreset(deviceType, name, settings, dispatch);
 
-         dispatch(showToast({
-          message: res?.message || "Preset saved successfully",
-          type: "success",
-          source: deviceType,
-        }));
+        dispatch(
+          showToast({
+            message: res?.response?.message,
+            type: "success",
+            source: deviceType,
+          })
+        );
 
-        if (res?.status === "success") {
+        if (res?.response?.status === "success") {
           if (deviceType === "fan") dispatch(closeFanModal());
           else dispatch(closeLightModal());
         }
         return { tempId, preset: res?.preset };
       } catch (err) {
-         dispatch(showToast({
-          message: err?.response?.data?.message || err?.message || "Failed to save preset",
-          type: "error",
-          source: deviceType,
-        }));
+        dispatch(
+          showToast({
+            message:
+              err?.response?.data?.message ||
+              err?.message ||
+              "Failed to save preset",
+            type: "error",
+            source: deviceType,
+          })
+        );
         return rejectWithValue({ tempId, error: err.message });
       }
     }

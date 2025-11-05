@@ -13,6 +13,7 @@ import Input from "./Input";
 const Modal = ({ slice = "fan" }) => {
   const dispatch = useDispatch();
   const deviceState = useSelector((state) => state[slice]);
+  const { loading } = deviceState;
   const [name, setName] = useState("");
 
   const handleSave = () => {
@@ -60,15 +61,21 @@ const Modal = ({ slice = "fan" }) => {
           placeholder="Name it"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          required={true}
         />
 
         <div className="flex justify-end gap-3">
-          <Button label="Cancel" variant="secondary" onClick={handleClose} />
           <Button
-            label="Save Preset"
+            label="Cancel"
+            variant="secondary"
+            onClick={handleClose}
+            disabled={loading}
+          />
+          <Button
+            label={loading ? "Saving..." : "Save Preset"}
             variant="primary"
             onClick={handleSave}
-            disabled={!name.trim()}
+            disabled={!name.trim() || loading}
           />
         </div>
       </div>

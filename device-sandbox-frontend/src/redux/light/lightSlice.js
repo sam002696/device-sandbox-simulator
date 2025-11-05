@@ -64,6 +64,8 @@ const lightSlice = createSlice({
 
       // Optimistic pending: show immediately + activate
       .addCase(savePresetOptimistic("light").pending, (state, action) => {
+        state.loading = true;
+        state.error = null;
         const { tempId, name, settings } = action.meta.arg;
         const newPreset = { id: tempId, name, settings, isTemp: true };
         state.presets.push(newPreset);
@@ -79,6 +81,8 @@ const lightSlice = createSlice({
 
       // Fulfilled: replacing temporary preset with backend version + keep active
       .addCase(savePresetOptimistic("light").fulfilled, (state, action) => {
+        state.loading = false;
+        state.error = null;
         const { tempId, preset } = action.payload || {};
         if (!preset || !preset.id) return;
         const index = state.presets.findIndex((p) => p.id === tempId);
@@ -88,6 +92,8 @@ const lightSlice = createSlice({
 
       // Rollbacking failed save
       .addCase(savePresetOptimistic("light").rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload?.error || "Failed to save preset";
         const { tempId } = action.payload || {};
         state.presets = state.presets.filter((p) => p.id !== tempId);
         if (state.activePresetId === tempId) state.activePresetId = null;
