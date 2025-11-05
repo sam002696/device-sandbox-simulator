@@ -1,22 +1,41 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { createPreset, fetchPresets } from "../api/presetService";
+import { showToast } from "./toastSlice";
+import { closeModal as closeFanModal } from "../../redux/fan/fanSlice";
+import { closeModal as closeLightModal } from "../../redux/light/lightSlice";
 
 // Fetch presets
 export const getPresets = (deviceType) =>
   createAsyncThunk(`${deviceType}/getPresets`, async () => {
     const res = await fetchPresets(deviceType);
-    return res.presets || [];
+    return res?.presets || [];
   });
 
 // Save preset
 export const savePresetOptimistic = (deviceType) =>
   createAsyncThunk(
     `${deviceType}/savePresetOptimistic`,
-    async ({ tempId, name, settings }, { rejectWithValue }) => {
+    async ({ tempId, name, settings }, { rejectWithValue, dispatch }) => {
       try {
         const res = await createPreset(deviceType, name, settings);
-        return { tempId, preset: res.preset };
+
+         dispatch(showToast({
+          message: res?.message || "Preset saved successfully",
+          type: "success",
+          source: deviceType,
+        }));
+
+        if (res?.status === "success") {
+          if (deviceType === "fan") dispatch(closeFanModal());
+          else dispatch(closeLightModal());
+        }
+        return { tempId, preset: res?.preset };
       } catch (err) {
+         dispatch(showToast({
+          message: err?.response?.data?.message || err?.message || "Failed to save preset",
+          type: "error",
+          source: deviceType,
+        }));
         return rejectWithValue({ tempId, error: err.message });
       }
     }

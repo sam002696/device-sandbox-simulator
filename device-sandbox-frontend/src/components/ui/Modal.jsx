@@ -7,7 +7,8 @@ import { savePresetOptimistic } from "../../redux/shared/presetThunks";
 // Actions
 import { closeModal as closeFanModal } from "../../redux/fan/fanSlice";
 import { closeModal as closeLightModal } from "../../redux/light/lightSlice";
-import { showToast } from "../../redux/shared/toastSlice";
+import Button from "./Button";
+import Input from "./Input";
 
 const Modal = ({ slice = "fan" }) => {
   const dispatch = useDispatch();
@@ -39,15 +40,6 @@ const Modal = ({ slice = "fan" }) => {
       })
     );
 
-    // Show toast immediately
-    dispatch(
-      showToast({ message: "Preset saved", type: "success", source: slice })
-    );
-
-    // Close modal based on slice
-    if (slice === "fan") dispatch(closeFanModal());
-    else dispatch(closeLightModal());
-
     setName("");
   };
 
@@ -64,27 +56,20 @@ const Modal = ({ slice = "fan" }) => {
           By adding this effect as a preset you can reuse it anytime.
         </p>
 
-        <input
-          type="text"
+        <Input
           placeholder="Name it"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full p-2 rounded-md bg-[#1E2939] text-gray-200 outline-none mb-4"
         />
 
         <div className="flex justify-end gap-3">
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 text-sm rounded-md bg-gray-600 hover:bg-gray-700"
-          >
-            Cancel
-          </button>
-          <button
+          <Button label="Cancel" variant="secondary" onClick={handleClose} />
+          <Button
+            label="Save Preset"
+            variant="primary"
             onClick={handleSave}
-            className="px-4 py-2 text-sm rounded-md bg-blue-600 hover:bg-blue-700"
-          >
-            Save Preset
-          </button>
+            disabled={!name.trim()}
+          />
         </div>
       </div>
     </div>

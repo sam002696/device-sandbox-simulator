@@ -1,4 +1,3 @@
-// src/redux/ui/toastSlice.js
 import { createSlice } from "@reduxjs/toolkit";
 
 const toastSlice = createSlice({
