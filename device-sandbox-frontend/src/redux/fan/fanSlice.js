@@ -1,10 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createDeviceBase } from "../shared/deviceSliceBase";
+import { getPresets, savePresetOptimistic } from "../shared/presetThunks";
 
 const { baseInitialState, baseReducers } = createDeviceBase(
-  {
-    speed: 0,
-  },
+  { speed: 0 },
   {
     togglePower: (state) => {
       state.isOn = !state.isOn;
@@ -24,23 +23,6 @@ const { baseInitialState, baseReducers } = createDeviceBase(
       state.activePresetId = null;
     },
 
-    // extend savePreset to apply fan settings
-    savePreset: {
-      reducer(state, action) {
-        const { id, name, settings } = action.payload;
-        state.presets.push({ id, name, settings });
-        state.showModal = false;
-        state.isOn = settings.power;
-        state.speed = settings.speed;
-        state.showActions = state.isOn && state.speed > 0;
-        state.activePresetId = id;
-        state.activeTab = "savedPreset";
-      },
-      prepare(name, settings) {
-        return { payload: { id: crypto.randomUUID(), name, settings } };
-      },
-    },
-
     applyPreset: (state, action) => {
       const preset = action.payload;
       if (preset) {
@@ -58,6 +40,49 @@ const fanSlice = createSlice({
   name: "fan",
   initialState: baseInitialState,
   reducers: baseReducers,
+
+  extraReducers: (builder) => {
+    builder
+      //  Fetch presets from backend
+      .addCase(getPresets("fan").fulfilled, (state, action) => {
+        state.presets = action.payload;
+      })
+
+      // Optimistic pending: add temp + activate immediately
+      .addCase(savePresetOptimistic("fan").pending, (state, action) => {
+        const { tempId, name, settings } = action.meta.arg;
+        const newPreset = { id: tempId, name, settings, isTemp: true };
+
+        // pushing it to UI
+        state.presets.push(newPreset);
+
+        // immediately activate
+        state.isOn = settings.power;
+        state.speed = settings.speed;
+        state.showActions = state.isOn && state.speed > 0;
+        state.activePresetId = tempId;
+        state.activeTab = "savedPreset";
+      })
+
+      //  Fulfilled: replacing temp with real backend version + keep active
+      .addCase(savePresetOptimistic("fan").fulfilled, (state, action) => {
+        const { tempId, preset } = action.payload || {};
+        if (!preset || !preset.id) return;
+
+        const index = state.presets.findIndex((p) => p.id === tempId);
+        if (index !== -1) state.presets[index] = preset;
+
+        // making sure the active preset updates to real one
+        state.activePresetId = preset.id;
+      })
+
+      //  Rollbacking if API fails
+      .addCase(savePresetOptimistic("fan").rejected, (state, action) => {
+        const { tempId } = action.payload || {};
+        state.presets = state.presets.filter((p) => p.id !== tempId);
+        if (state.activePresetId === tempId) state.activePresetId = null;
+      });
+  },
 });
 
 export const {
@@ -66,7 +91,6 @@ export const {
   clearFan,
   openModal,
   closeModal,
-  savePreset,
   applyPreset,
   setActiveTab,
 } = fanSlice.actions;

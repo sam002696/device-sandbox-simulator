@@ -1,15 +1,12 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 
-import {
-  closeModal as closeFanModal,
-  savePreset as saveFanPreset,
-} from "../../redux/fan/fanSlice";
+// Async thunks
+import { savePresetOptimistic } from "../../redux/shared/presetThunks";
 
-import {
-  closeModal as closeLightModal,
-  savePreset as saveLightPreset,
-} from "../../redux/light/lightSlice";
+// Actions
+import { closeModal as closeFanModal } from "../../redux/fan/fanSlice";
+import { closeModal as closeLightModal } from "../../redux/light/lightSlice";
 import { showToast } from "../../redux/shared/toastSlice";
 
 const Modal = ({ slice = "fan" }) => {
@@ -20,26 +17,36 @@ const Modal = ({ slice = "fan" }) => {
   const handleSave = () => {
     if (name.trim() === "") return;
 
-    if (slice === "fan") {
-      dispatch(
-        saveFanPreset(name, {
-          power: deviceState.isOn,
-          speed: deviceState.speed,
-        })
-      );
-      dispatch(showToast({ message: "Preset saved", type: "success", source: slice }));
-      dispatch(closeFanModal());
-    } else {
-      dispatch(
-        saveLightPreset(name, {
-          power: deviceState.isOn,
-          brightness: deviceState.brightness,
-          color: deviceState.color,
-        })
-      );
-      dispatch(showToast({ message: "Preset saved", type: "success", source: slice }));
-      dispatch(closeLightModal());
-    }
+    // Prepare settings based on device type
+    const settings =
+      slice === "fan"
+        ? { power: deviceState.isOn, speed: deviceState.speed }
+        : {
+            power: deviceState.isOn,
+            brightness: deviceState.brightness,
+            color: deviceState.color,
+          };
+
+    // Temporary ID for optimistic updates
+    const tempId = crypto.randomUUID();
+
+    // Dispatch async thunk (optimistic)
+    dispatch(
+      savePresetOptimistic(slice)({
+        tempId,
+        name,
+        settings,
+      })
+    );
+
+    // Show toast immediately
+    dispatch(
+      showToast({ message: "Preset saved", type: "success", source: slice })
+    );
+
+    // Close modal based on slice
+    if (slice === "fan") dispatch(closeFanModal());
+    else dispatch(closeLightModal());
 
     setName("");
   };
