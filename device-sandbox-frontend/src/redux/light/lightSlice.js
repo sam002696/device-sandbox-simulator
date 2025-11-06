@@ -75,6 +75,7 @@ const lightSlice = createSlice({
           settings,
           isTemp: true,
           createdAt: now,
+          type: "light", 
         };
 
         state.presets = [newPreset, ...state.presets];
@@ -97,7 +98,7 @@ const lightSlice = createSlice({
 
         const index = state.presets.findIndex((p) => p.id === tempId);
         if (index !== -1) {
-          state.presets[index] = preset;
+          state.presets[index] = { ...preset, type: preset.type || "light" };
         }
 
         // Keep newly saved preset active

@@ -33,10 +33,10 @@ const Toast = ({ message, type = "success", onClose }) => {
   const { icon, bg, border } = toastConfig[type] || toastConfig.success;
 
   return (
-    <div className="fixed inset-0 flex items-start justify-center z-50 pointer-events-none">
+    <div className="fixed inset-0 flex items-start justify-center z-60 pointer-events-none">
       <div className="mt-6 animate-toast-slide">
         <div
-          className={`flex items-center gap-2 ${bg} backdrop-blur-md text-white px-5 py-2 rounded-md shadow-lg border ${border}`}
+          className={`flex items-center gap-2 ${bg} backdrop-blur-md text-white px-5 py-2 rounded-md shadow-lg border ${border} pointer-events-auto`}
         >
           <div className="flex items-center justify-center rounded-full p-1 bg-black/20">
             {icon}

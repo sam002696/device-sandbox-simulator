@@ -63,6 +63,7 @@ const fanSlice = createSlice({
           settings,
           isTemp: true,
           createdAt: now,
+          type: "fan",   
         };
 
         state.presets = [newPreset, ...state.presets];
@@ -84,7 +85,7 @@ const fanSlice = createSlice({
 
         const index = state.presets.findIndex((p) => p.id === tempId);
         if (index !== -1) {
-          state.presets[index] = preset;
+          state.presets[index] = { ...preset, type: preset.type || "fan" };
         }
 
         // keep active highlight stable
