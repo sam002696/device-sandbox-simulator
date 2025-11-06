@@ -2,7 +2,10 @@ import axios from "axios";
 import { PRESET_SERVICE_API } from "../../services/apiService";
 
 export const fetchPresets = async (type) => {
-  const response = await axios.get(`${PRESET_SERVICE_API.GET}?type=${type}`);
+  const url = type
+    ? `${PRESET_SERVICE_API.GET}?type=${type}`
+    : PRESET_SERVICE_API.GET;
+  const response = await axios.get(url);
 
   const normalized = (response?.data?.data || []).map((p) => ({
     id: p.id,
@@ -28,7 +31,7 @@ export const createPreset = async (type, name, settings) => {
   const response = await axios.post(PRESET_SERVICE_API.CREATE, payload);
   const preset = response?.data?.data;
 
-    const normalized = {
+  const normalized = {
     id: preset.id,
     name: preset.name,
     type: preset.device?.type,

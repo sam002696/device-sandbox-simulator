@@ -62,15 +62,24 @@ const lightSlice = createSlice({
         state.presets = action.payload;
       })
 
-      // Optimistic pending: show immediately + activate
+      // Optimistic UI: add temp preset at top & activate instantly
       .addCase(savePresetOptimistic("light").pending, (state, action) => {
         state.loading = true;
         state.error = null;
         const { tempId, name, settings } = action.meta.arg;
-        const newPreset = { id: tempId, name, settings, isTemp: true };
-        state.presets.push(newPreset);
 
-        // Making new preset active right away
+        const now = new Date().toISOString();
+        const newPreset = {
+          id: tempId,
+          name,
+          settings,
+          isTemp: true,
+          createdAt: now,
+        };
+
+        state.presets = [newPreset, ...state.presets];
+
+        // Immediately activate
         state.isOn = settings.power;
         state.brightness = settings.brightness;
         state.color = settings.color;
@@ -79,14 +88,19 @@ const lightSlice = createSlice({
         state.activeTab = "savedPreset";
       })
 
-      // Fulfilled: replacing temporary preset with backend version + keep active
+      // Replace temporary with backend preset (keep order)
       .addCase(savePresetOptimistic("light").fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
         const { tempId, preset } = action.payload || {};
         if (!preset || !preset.id) return;
+
         const index = state.presets.findIndex((p) => p.id === tempId);
-        if (index !== -1) state.presets[index] = preset;
+        if (index !== -1) {
+          state.presets[index] = preset;
+        }
+
+        // Keep newly saved preset active
         state.activePresetId = preset.id;
       })
 

@@ -6,7 +6,7 @@ import { closeModal as closeLightModal } from "../../redux/light/lightSlice";
 
 // Fetch presets
 export const getPresets = (deviceType) =>
-  createAsyncThunk(`${deviceType}/getPresets`, async () => {
+  createAsyncThunk(`${deviceType || "global"}/getPresets`, async () => {
     const res = await fetchPresets(deviceType);
     return res?.presets || [];
   });

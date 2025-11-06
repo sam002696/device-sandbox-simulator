@@ -9,16 +9,22 @@ import {
   openModal as openLightModal,
 } from "../../redux/light/lightSlice";
 
-const Topbar = ({ setSidebarOpen, slice = "fan" }) => {
+const Topbar = ({ setSidebarOpen, slice = "" }) => {
   const dispatch = useDispatch();
-  const { showActions, showModal } = useSelector((state) => state[slice]);
+
+  const deviceState = useSelector((state) =>
+    slice ? state[slice] : { showActions: false, showModal: false }
+  );
+  const { showActions, showModal } = deviceState;
 
   const handleClear = () => {
-    slice === "fan" ? dispatch(clearFan()) : dispatch(clearLight());
+    if (slice === "fan") dispatch(clearFan());
+    else if (slice === "light") dispatch(clearLight());
   };
 
   const handleOpenModal = () => {
-    slice === "fan" ? dispatch(openFanModal()) : dispatch(openLightModal());
+    if (slice === "fan") dispatch(openFanModal());
+    else if (slice === "light") dispatch(openLightModal());
   };
 
   return (

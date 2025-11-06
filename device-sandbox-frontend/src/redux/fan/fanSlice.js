@@ -52,13 +52,22 @@ const fanSlice = createSlice({
       .addCase(savePresetOptimistic("fan").pending, (state, action) => {
         state.loading = true;
         state.error = null;
+
         const { tempId, name, settings } = action.meta.arg;
-        const newPreset = { id: tempId, name, settings, isTemp: true };
 
-        // pushing it to UI
-        state.presets.push(newPreset);
+        const now = new Date().toISOString();
 
-        // immediately activate
+        const newPreset = {
+          id: tempId,
+          name,
+          settings,
+          isTemp: true,
+          createdAt: now,
+        };
+
+        state.presets = [newPreset, ...state.presets];
+
+        // Immediately activate
         state.isOn = settings.power;
         state.speed = settings.speed;
         state.showActions = state.isOn && state.speed > 0;
@@ -74,9 +83,11 @@ const fanSlice = createSlice({
         if (!preset || !preset.id) return;
 
         const index = state.presets.findIndex((p) => p.id === tempId);
-        if (index !== -1) state.presets[index] = preset;
+        if (index !== -1) {
+          state.presets[index] = preset;
+        }
 
-        // making sure the active preset updates to real one
+        // keep active highlight stable
         state.activePresetId = preset.id;
       })
 

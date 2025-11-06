@@ -9,15 +9,18 @@ import {
 } from "../../redux/light/lightSlice";
 import { getPresets } from "../../redux/shared/presetThunks";
 
-const Sidebar = ({ isFan, slice }) => {
+const Sidebar = ({ slice }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { presets, activePresetId } = useSelector((state) => state[slice]);
 
-  // Fetch presets from backend on mount
+  const isHome = !slice;
+  const { presets, activePresetId } = useSelector((state) =>
+    isHome ? state.global : state[slice]
+  );
+
   useEffect(() => {
-    dispatch(getPresets(isFan ? "fan" : "light")());
-  }, [dispatch, isFan]);
+    dispatch(getPresets(slice || "")());
+  }, [dispatch, slice]);
 
   const navItems = [
     { name: "Light", path: "/light", icon: LightbulbIcon },
@@ -25,20 +28,21 @@ const Sidebar = ({ isFan, slice }) => {
   ];
 
   const handlePresetClick = (preset) => {
-    if (isFan) {
+    if (preset.type === "fan") {
       dispatch(applyPreset(preset));
       dispatch(setActiveTab("savedPreset"));
       navigate("/fan");
-    } else {
+    } else if (preset.type === "light") {
       dispatch(applyLightPreset(preset));
       dispatch(setLightTab("savedPreset"));
       navigate("/light");
     }
   };
 
+  // console.log('presets', presets)
 
   return (
-    <aside className="w-56 bg-[#0b111e] border-r border-white/5 flex flex-col p-4">
+    <aside className="w-56 bg-[#0b111e] border-r border-white/5 flex flex-col p-4 overflow-y-scroll scrollbar-hidden">
       <h2 className="text-sm tracking-wide text-gray-400 mb-3">Devices</h2>
 
       <div className="space-y-4">

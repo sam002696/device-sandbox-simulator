@@ -7,8 +7,9 @@ const Sandbox = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
-  const isFan = location.pathname.includes("fan");
-  const slice = isFan ? "fan" : "light";
+   const isFan = location.pathname.includes("fan");
+  const isLight = location.pathname.includes("light");
+  const slice = isFan ? "fan" : isLight ? "light" : ""; 
 
   return (
     <div className="flex h-screen bg-[#03060c] text-gray-200">
@@ -16,7 +17,6 @@ const Sandbox = () => {
       <Sidebar
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        isFan={isFan}
         slice={slice}
       />
 

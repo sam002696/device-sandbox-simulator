@@ -9,9 +9,14 @@ class PresetService
 {
     public function getPresets($type = null)
     {
-        $presets = Preset::when($type, fn($query) =>
+        $presets = Preset::when(
+            $type,
+            fn($query) =>
             $query->where('device->type', $type)
-        )->get();
+
+        )
+            ->orderBy('created_at', 'desc')
+            ->get();
 
         return ApiResponseService::successResponse(
             $presets,

@@ -24,3 +24,20 @@
   animation: toast-slide 2.5s ease-in-out forwards;
 }
 
+
+.scrollbar-hidden {
+  /* Modern browsers */
+  scrollbar-width: none; /* Firefox */
+  
+  /* IE 10+ */
+  -ms-overflow-style: none; 
+
+  /* Very old Firefox fallback */
+  overflow: -moz-scrollbars-none; 
+}
+
+/* Chrome, Safari, Opera, Edge (Chromium) */
+.scrollbar-hidden::-webkit-scrollbar {
+  display: none;
+}
+
