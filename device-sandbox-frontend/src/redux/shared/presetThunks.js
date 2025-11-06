@@ -3,6 +3,7 @@ import { createPreset, fetchPresets } from "../api/presetService";
 import { showToast } from "./toastSlice";
 import { closeModal as closeFanModal } from "../../redux/fan/fanSlice";
 import { closeModal as closeLightModal } from "../../redux/light/lightSlice";
+import { restartDnd } from "../shared/dndSlice";
 
 // Fetch presets
 export const getPresets = (deviceType) =>
@@ -30,6 +31,7 @@ export const savePresetOptimistic = (deviceType) =>
         if (res?.response?.status === "success") {
           if (deviceType === "fan") dispatch(closeFanModal());
           else dispatch(closeLightModal());
+          dispatch(restartDnd());
         }
         return { tempId, preset: res?.preset };
       } catch (err) {
@@ -43,6 +45,7 @@ export const savePresetOptimistic = (deviceType) =>
             source: deviceType,
           })
         );
+        dispatch(restartDnd());
         return rejectWithValue({ tempId, error: err.message });
       }
     }

@@ -1,50 +1,30 @@
+// components/dnd/WorkspaceDropZone.jsx
 import { useMemo, useState } from "react";
 import { useDrop } from "react-dnd";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-
-import { applyPreset as applyFanPreset, setActiveTab as setFanTab } from "../../redux/fan/fanSlice";
-import { applyPreset as applyLightPreset, setActiveTab as setLightTab } from "../../redux/light/lightSlice";
 import { ItemTypes } from "./Draggables";
 
 const WorkspaceDropZone = ({ children }) => {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [dropPulse, setDropPulse] = useState(false);
 
   const [{ isOver, canDrop }, dropRef] = useDrop(
     () => ({
       accept: [ItemTypes.NAV, ItemTypes.PRESET],
-      drop: (item) => {
+      canDrop: () => true,
+
+      drop: () => {
         setDropPulse(true);
         setTimeout(() => setDropPulse(false), 280);
-
-        if (item.kind === "nav") {
-          if (item.path) navigate(item.path);
-          return;
-        }
-
-        if (item.kind === "preset") {
-          const type = item.deviceType; // "fan" | "light"
-          if (type === "fan") {
-            dispatch(applyFanPreset(item.preset));
-            dispatch(setFanTab("savedPreset"));
-            navigate("/fan");
-          } else if (type === "light") {
-            dispatch(applyLightPreset(item.preset));
-            dispatch(setLightTab("savedPreset"));
-            navigate("/light");
-          }
-          return;
-        }
+        return { target: "workspace" };
       },
+
+      // IMPORTANT: don't use shallow here; nested nodes can re-mount after save
       collect: (monitor) => ({
-        isOver: monitor.isOver({ shallow: true }),
+        isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
       }),
     }),
-    [dispatch, navigate]
+    []
   );
 
   const ringClass = useMemo(() => {
@@ -54,43 +34,53 @@ const WorkspaceDropZone = ({ children }) => {
   }, [isOver, canDrop]);
 
   return (
-    <motion.div
+    // Plain div holds the drop ref (stable DOM)
+    <div
       ref={dropRef}
-      className={`relative h-full w-full ${ringClass}`}
-      animate={{ backgroundColor: isOver ? "#0C1426" : "#0A101D" }}
-      transition={{ duration: 0.15 }}
+      className={`relative z-0 h-full w-full ${ringClass}`}
+      // Make sure browser doesn't block drops
+      onDragOver={(e) => e.preventDefault()}
+      // Ensure the zone actually receives events (in case a parent set none)
+      style={{ pointerEvents: "auto" }}
     >
-      <AnimatePresence>
-        {isOver && canDrop && (
-          <motion.div
-            key="over"
-            className="pointer-events-none absolute inset-0 grid place-items-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.35 }}
-            exit={{ opacity: 0 }}
-          >
-            <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide">
-              {/* Drop to load into workspace */}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Visuals live in motion.div; no refs here */}
+      <motion.div
+        animate={{ backgroundColor: isOver ? "#0C1426" : "#0A101D" }}
+        transition={{ duration: 0.15 }}
+        className="relative h-full w-full"
+      >
+        <AnimatePresence>
+          {isOver && canDrop && (
+            <motion.div
+              key="over"
+              className="pointer-events-none absolute inset-0 grid place-items-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.35 }}
+              exit={{ opacity: 0 }}
+            >
+              <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide">
+                {/* Drop to load into workspace */}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <AnimatePresence>
-        {dropPulse && (
-          <motion.span
-            key="pulse"
-            className="pointer-events-none absolute inset-0 rounded-xl"
-            initial={{ boxShadow: "0 0 0 0 rgba(59,130,246,0.5)" }}
-            animate={{ boxShadow: "0 0 0 24px rgba(59,130,246,0)" }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.28 }}
-          />
-        )}
-      </AnimatePresence>
+        <AnimatePresence>
+          {dropPulse && (
+            <motion.span
+              key="pulse"
+              className="pointer-events-none absolute inset-0 rounded-xl"
+              initial={{ boxShadow: "0 0 0 0 rgba(59,130,246,0.5)" }}
+              animate={{ boxShadow: "0 0 0 24px rgba(59,130,246,0)" }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.28 }}
+            />
+          )}
+        </AnimatePresence>
 
-      <div className="h-full w-full">{children}</div>
-    </motion.div>
+        <div className="h-full w-full">{children}</div>
+      </motion.div>
+    </div>
   );
 };
 

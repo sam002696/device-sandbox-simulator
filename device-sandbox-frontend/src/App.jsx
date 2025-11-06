@@ -14,11 +14,14 @@ import Toast from "./components/ui/Toast";
 import { hideToast } from "./redux/shared/toastSlice";
 
 function App() {
+  const dndEpoch = useSelector((state) => state.dnd.epoch);
   const { message, type, source } = useSelector((state) => state.toast);
   const dispatch = useDispatch();
 
+  console.log('dndEpoch', dndEpoch);
+
   return (
-    <DndProvider backend={HTML5Backend /* or TouchBackend */}>
+    <DndProvider key={dndEpoch} backend={HTML5Backend /* or TouchBackend */}>
       <Router>
         {message && (
           <Toast
