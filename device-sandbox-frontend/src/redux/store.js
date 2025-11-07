@@ -3,7 +3,6 @@ import fanReducer from "./fan/fanSlice";
 import lightReducer from "./light/lightSlice";
 import toastReducer from "./shared/toastSlice";
 import globalReducer from "./global/globalSlice";
-import dndReducer from "./shared/dndSlice";
 
 const store = configureStore({
   reducer: {
@@ -11,7 +10,6 @@ const store = configureStore({
     light: lightReducer,
     toast: toastReducer,
     global: globalReducer,
-    dnd: dndReducer,
   },
 });
 

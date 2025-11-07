@@ -1,4 +1,5 @@
 import { useDragLayer } from "react-dnd";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
 function getItemStyles(currentOffset) {
@@ -9,6 +10,7 @@ function getItemStyles(currentOffset) {
 }
 
 const CustomDragLayer = () => {
+  // Getting drag state from DnD monitor
   const { item,  isDragging, currentOffset } = useDragLayer(
     (monitor) => ({
       item: monitor.getItem(),
@@ -18,6 +20,7 @@ const CustomDragLayer = () => {
     })
   );
 
+  // If not dragging, don't need to render anything
   if (!isDragging || !currentOffset) return null;
 
   const label =

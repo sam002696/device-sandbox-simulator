@@ -1,4 +1,3 @@
-// components/dnd/Draggables.jsx
 import React, { useEffect } from "react";
 import { useDrag } from "react-dnd";
 import { getEmptyImage } from "react-dnd-html5-backend";
@@ -13,10 +12,8 @@ import {
   applyPreset as applyLightPreset,
   setActiveTab as setLightTab,
 } from "../../redux/light/lightSlice";
+import { ItemTypes } from "../../constants/itemType";
 
-export const ItemTypes = { NAV: "NAV", PRESET: "PRESET" };
-
-// Expects `children` to be a DOM element (e.g., <a>, <li>, <div>) so we can attach ref.
 export function DraggableNavItem({ item, children }) {
   const navigate = useNavigate();
 
@@ -32,7 +29,7 @@ export function DraggableNavItem({ item, children }) {
       collect: (monitor) => ({ isDragging: monitor.isDragging() }),
       canDrag: () => true,
 
-      // 👇 Act on ANY successful drop (avoids inner-target swallowing issues)
+      // acting on any successful drop (don’t depend on dropResult)
       end: (dragItem, monitor) => {
         if (!monitor.didDrop()) return;
         if (dragItem?.path) navigate(dragItem.path);
@@ -69,7 +66,7 @@ export function DraggablePresetItem({ preset, children }) {
       collect: (monitor) => ({ isDragging: monitor.isDragging() }),
       canDrag: () => true,
 
-      // 👇 Act on ANY successful drop (don’t depend on dropResult)
+      // acting on any successful drop (don’t depend on dropResult)
       end: (dragItem, monitor) => {
         if (!monitor.didDrop()) return;
 
@@ -86,8 +83,6 @@ export function DraggablePresetItem({ preset, children }) {
           navigate("/light");
           return;
         }
-        // Optional debug:
-        // console.warn("[DraggablePresetItem.end] Unknown deviceType:", t, dragItem);
       },
     }),
     [dispatch, navigate, preset]

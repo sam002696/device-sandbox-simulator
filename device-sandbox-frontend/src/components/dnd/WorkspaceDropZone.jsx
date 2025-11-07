@@ -1,8 +1,10 @@
 // components/dnd/WorkspaceDropZone.jsx
 import { useMemo, useState } from "react";
 import { useDrop } from "react-dnd";
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
-import { ItemTypes } from "./Draggables";
+import { ItemTypes } from "../../constants/itemType";
+
 
 const WorkspaceDropZone = ({ children }) => {
   const [dropPulse, setDropPulse] = useState(false);
@@ -18,7 +20,7 @@ const WorkspaceDropZone = ({ children }) => {
         return { target: "workspace" };
       },
 
-      // IMPORTANT: don't use shallow here; nested nodes can re-mount after save
+      // Collecting drop zone state
       collect: (monitor) => ({
         isOver: monitor.isOver(),
         canDrop: monitor.canDrop(),
@@ -34,13 +36,13 @@ const WorkspaceDropZone = ({ children }) => {
   }, [isOver, canDrop]);
 
   return (
-    // Plain div holds the drop ref (stable DOM)
+    // Container to capture drops
     <div
       ref={dropRef}
       className={`relative z-0 h-full w-full ${ringClass}`}
-      // Make sure browser doesn't block drops
+      // Making sure browser doesn't block drops
       onDragOver={(e) => e.preventDefault()}
-      // Ensure the zone actually receives events (in case a parent set none)
+      // ensuring pointer events work inside drop zone
       style={{ pointerEvents: "auto" }}
     >
       {/* Visuals live in motion.div; no refs here */}
@@ -59,7 +61,7 @@ const WorkspaceDropZone = ({ children }) => {
               exit={{ opacity: 0 }}
             >
               <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide">
-                {/* Drop to load into workspace */}
+                {/* Dropping to load into workspace */}
               </div>
             </motion.div>
           )}

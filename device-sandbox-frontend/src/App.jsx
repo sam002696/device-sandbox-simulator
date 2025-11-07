@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-// import { TouchBackend } from "react-dnd-touch-backend";
 
 import Sandbox from "./layout/Sandbox";
 import FanSandbox from "./pages/FanSandbox";
@@ -14,14 +13,12 @@ import Toast from "./components/ui/Toast";
 import { hideToast } from "./redux/shared/toastSlice";
 
 function App() {
-  const dndEpoch = useSelector((state) => state.dnd.epoch);
   const { message, type, source } = useSelector((state) => state.toast);
   const dispatch = useDispatch();
 
-  console.log('dndEpoch', dndEpoch);
 
   return (
-    <DndProvider key={dndEpoch} backend={HTML5Backend /* or TouchBackend */}>
+    <DndProvider  backend={HTML5Backend}>
       <Router>
         {message && (
           <Toast
