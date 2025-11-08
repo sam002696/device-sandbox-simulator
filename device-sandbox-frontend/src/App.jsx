@@ -13,12 +13,14 @@ import Toast from "./components/ui/Toast";
 import { hideToast } from "./redux/shared/toastSlice";
 
 function App() {
+  // Getting toast state from Redux store
   const { message, type, source } = useSelector((state) => state.toast);
   const dispatch = useDispatch();
 
-
   return (
-    <DndProvider  backend={HTML5Backend}>
+    // Setting up DnD context and routing
+    // allowing drag-and-drop functionality and navigation
+    <DndProvider backend={HTML5Backend}>
       <Router>
         {message && (
           <Toast

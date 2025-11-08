@@ -14,11 +14,14 @@ const Sidebar = ({ slice }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // determining if the current view is the home view
   const isHome = !slice;
-  const { presets, activePresetId } = useSelector((state) =>
-    isHome ? state.global : state[slice]
+  // selecting presets and active preset ID from the Redux store
+  const { presets, activePresetId } = useSelector(
+    (state) => (isHome ? state.global : state[slice]) //  state.fan or state.light
   );
 
+  // Fetching presets on component mount or when slice changes
   useEffect(() => {
     dispatch(getPresets(slice || "")());
   }, [dispatch, slice]);
@@ -28,6 +31,7 @@ const Sidebar = ({ slice }) => {
     { name: "Fan", path: "/fan", icon: FanIcon, deviceType: "fan" },
   ];
 
+  // Handling preset click based on its type
   const handlePresetClick = (preset) => {
     if (preset.type === "fan") {
       dispatch(applyPreset(preset));
@@ -45,6 +49,7 @@ const Sidebar = ({ slice }) => {
       <h2 className="text-sm tracking-wide text-gray-400 mb-3">Devices</h2>
 
       <div className="space-y-4">
+        {/* Navigation items */}
         {navItems.map((item) => (
           <DraggableNavItem key={item.name} item={item}>
             <NavLink
@@ -69,6 +74,7 @@ const Sidebar = ({ slice }) => {
           Saved Presets
         </h2>
 
+        {/* Preset items */}
         {presets?.length === 0 ? (
           <div className="border border-white/5 text-gray-500 text-sm rounded-lg px-3 py-2">
             Nothing added yet

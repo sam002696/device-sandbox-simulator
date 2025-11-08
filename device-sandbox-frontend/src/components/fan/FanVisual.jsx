@@ -5,6 +5,8 @@ import fanImg from "../../assets/fan.png";
 const FanVisual = () => {
   const { isOn, speed } = useSelector((state) => state.fan);
 
+  // Calculating spin speed based on fan speed
+  // here useMemo is used to optimize performance by memoizing the calculated spin speed
   const spinSpeed = useMemo(() => {
     const minDuration = 0.5;
     const maxDuration = 5;
@@ -23,6 +25,7 @@ const FanVisual = () => {
         className={`transition-all duration-500 ease-in-out mb-20 ${
           shouldSpin ? "animate-spin" : ""
         }`}
+        // Dynamically setting animation duration and opacity
         style={{
           animationDuration: shouldSpin ? spinSpeed : "0s",
           opacity: shouldSpin ? 1 : 0.6,

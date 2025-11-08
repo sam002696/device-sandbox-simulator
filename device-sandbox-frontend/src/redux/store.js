@@ -5,6 +5,7 @@ import toastReducer from "./shared/toastSlice";
 import globalReducer from "./global/globalSlice";
 
 const store = configureStore({
+  // Combining all reducers into the store
   reducer: {
     fan: fanReducer,
     light: lightReducer,

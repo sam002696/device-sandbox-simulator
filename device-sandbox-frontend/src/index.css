@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-
+/* Toast slide animation */
 @keyframes toast-slide {
   0% {
     opacity: 0;
@@ -20,11 +20,12 @@
   }
 }
 
+/* Toast slide animation */
 .animate-toast-slide {
   animation: toast-slide 2.5s ease-in-out forwards;
 }
 
-
+/* Custom scrollbar styles */
 .scrollbar-hidden {
   /* Modern browsers */
   scrollbar-width: none; /* Firefox */

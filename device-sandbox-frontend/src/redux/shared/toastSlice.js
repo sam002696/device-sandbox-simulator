@@ -8,12 +8,14 @@ const toastSlice = createSlice({
     source: null, 
   },
   reducers: {
+    // Showing a toast notification
     showToast: (state, action) => {
       const { message, type = "info", source = null } = action.payload;
       state.message = message;
       state.type = type;
       state.source = source;
     },
+    // Hiding the toast notification
     hideToast: (state) => {
       state.message = null;
       state.type = "info";

@@ -17,6 +17,7 @@ import { ItemTypes } from "../../constants/itemType";
 export function DraggableNavItem({ item, children }) {
   const navigate = useNavigate();
 
+  // Setting up drag behavior
   const [{ isDragging }, dragRef, preview] = useDrag(
     () => ({
       type: ItemTypes.NAV,
@@ -38,6 +39,7 @@ export function DraggableNavItem({ item, children }) {
     [navigate, item]
   );
 
+  // Hiding default drag preview
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
@@ -53,6 +55,7 @@ export function DraggablePresetItem({ preset, children }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // Setting up drag behavior
   const [{ isDragging }, dragRef, preview] = useDrag(
     () => ({
       type: ItemTypes.PRESET,
@@ -88,10 +91,12 @@ export function DraggablePresetItem({ preset, children }) {
     [dispatch, navigate, preset]
   );
 
+  // Hiding default drag preview
   useEffect(() => {
     preview(getEmptyImage(), { captureDraggingState: true });
   }, [preview]);
 
+  // Rendering the draggable element
   return React.cloneElement(children, {
     ref: dragRef,
     "data-dragging": isDragging ? "true" : "false",

@@ -9,6 +9,7 @@ import { ItemTypes } from "../../constants/itemType";
 const WorkspaceDropZone = ({ children }) => {
   const [dropPulse, setDropPulse] = useState(false);
 
+  // Setting up drop zone behavior
   const [{ isOver, canDrop }, dropRef] = useDrop(
     () => ({
       accept: [ItemTypes.NAV, ItemTypes.PRESET],
@@ -29,6 +30,7 @@ const WorkspaceDropZone = ({ children }) => {
     []
   );
 
+  // Determining ring class based on drop state
   const ringClass = useMemo(() => {
     if (isOver && canDrop) return "ring-2 ring-blue-400/70";
     if (isOver && !canDrop) return "ring-2 ring-red-400/70";

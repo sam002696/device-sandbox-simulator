@@ -8,6 +8,7 @@ export const createDeviceBase = (
   extraInitialState = {},
   customReducers = {}
 ) => {
+  // Defining the base initial state
   const baseInitialState = {
     isOn: false,
     showActions: false,
@@ -20,6 +21,7 @@ export const createDeviceBase = (
     ...extraInitialState,
   };
 
+  // Defining the base reducers
   const baseReducers = {
     openModal: (state) => {
       state.showModal = true;
@@ -31,6 +33,7 @@ export const createDeviceBase = (
       state.activeTab = action.payload;
     },
 
+    // Saving a new preset
     savePreset: {
       reducer(state, action) {
         const { id, name, settings } = action.payload;
@@ -51,6 +54,7 @@ export const createDeviceBase = (
       },
     },
 
+    // Applying a preset
     applyPreset: (state, action) => {
       const preset = action.payload;
       if (preset) {

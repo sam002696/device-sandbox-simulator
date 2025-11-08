@@ -6,6 +6,7 @@ const globalSlice = createSlice({
   name: "global",
   initialState: { presets: [], loading: false, error: null },
   reducers: {},
+  // Handling asynchronous actions for fetching presets
   extraReducers: (builder) => {
     builder
       .addCase(getPresets("").pending, (state) => {

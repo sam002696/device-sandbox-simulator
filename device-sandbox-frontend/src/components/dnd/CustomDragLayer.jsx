@@ -2,6 +2,7 @@ import { useDragLayer } from "react-dnd";
 // eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 
+// Helper function to get item styles
 function getItemStyles(currentOffset) {
   if (!currentOffset) return { display: "none" };
   const { x, y } = currentOffset;
@@ -9,6 +10,7 @@ function getItemStyles(currentOffset) {
   return { transform, WebkitTransform: transform };
 }
 
+// Custom drag layer component
 const CustomDragLayer = () => {
   // Getting drag state from DnD monitor
   const { item,  isDragging, currentOffset } = useDragLayer(
@@ -23,6 +25,7 @@ const CustomDragLayer = () => {
   // If not dragging, don't need to render anything
   if (!isDragging || !currentOffset) return null;
 
+  // Determining label based on item type
   const label =
     item?.label ||
     (item?.kind === "nav" ? item?.deviceType?.toUpperCase() : "ITEM");

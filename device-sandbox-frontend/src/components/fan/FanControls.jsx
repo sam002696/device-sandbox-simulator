@@ -11,6 +11,7 @@ const FanControls = () => {
       {/* Power toggle */}
       <div className="flex items-center justify-between mb-4">
         <span className="text-sm text-gray-300">Power</span>
+        {/* This is the power toggle switch */}
         <DeviceSwitch isOn={isOn} toggle={() => dispatch(togglePower())} />
       </div>
 
@@ -19,6 +20,7 @@ const FanControls = () => {
         <span className="text-sm text-gray-300">Speed</span>
         <span className="text-sm text-gray-400">{speed}%</span>
       </div>
+      {/* This is the speed slider */}
       <input
         type="range"
         min={0}
