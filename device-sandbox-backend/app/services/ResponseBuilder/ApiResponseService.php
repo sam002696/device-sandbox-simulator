@@ -5,6 +5,8 @@ namespace App\Services\ResponseBuilder;
 use Illuminate\Validation\ValidationException;
 // use Exception;
 
+
+// API Response Service
 class ApiResponseService
 {
 
@@ -32,7 +34,7 @@ class ApiResponseService
 
 
     /**
-     * Handle validation errors.
+     * Handling validation errors.
      */
     public static function handleValidationError(ValidationException $exception)
     {

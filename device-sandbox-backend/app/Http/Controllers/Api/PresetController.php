@@ -8,15 +8,18 @@ use App\Services\ResponseBuilder\ApiResponseService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 
+// Preset management controller
 class PresetController extends Controller
 {
     protected $presetService;
 
+    // Dependency injection of PresetService
     public function __construct(PresetService $presetService)
     {
         $this->presetService = $presetService;
     }
 
+    // List all presets, optionally filtered by type
     public function index(Request $request)
     {
         try {
@@ -27,6 +30,7 @@ class PresetController extends Controller
         }
     }
 
+    // Storing a new preset with validation
     public function store(Request $request)
     {
         try {
@@ -38,10 +42,10 @@ class PresetController extends Controller
             ]);
 
             return $this->presetService->createPreset($validated);
-        } catch (ValidationException $e) {
-            return ApiResponseService::handleValidationError($e);
+        } catch (ValidationException $e) { // Handle validation errors
+            return ApiResponseService::handleValidationError($e); // 422 Unprocessable Entity
         } catch (\Throwable $e) {
-            return ApiResponseService::handleUnexpectedError($e);
+            return ApiResponseService::handleUnexpectedError($e); // 500 Internal Server Error
         }
     }
 }

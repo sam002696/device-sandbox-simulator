@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Creating the presets table
         Schema::create('presets', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->json('device');
+            $table->string('name'); // Preset name
+            $table->json('device'); // Device settings
             $table->timestamps();
         });
     }
