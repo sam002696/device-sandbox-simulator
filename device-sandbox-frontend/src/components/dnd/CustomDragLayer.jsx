@@ -31,7 +31,7 @@ const CustomDragLayer = () => {
     (item?.kind === "nav" ? item?.deviceType?.toUpperCase() : "ITEM");
 
   return (
-    <div className="pointer-events-none fixed top-0 left-0 h-full w-1/6 z-9999">
+    <div className="pointer-events-none fixed top-0 left-0 h-full w-1/10 z-9999">
       <div style={getItemStyles(currentOffset)}>
         <motion.div
           initial={{ scale: 0.92, rotate: -2, opacity: 0.9 }}
