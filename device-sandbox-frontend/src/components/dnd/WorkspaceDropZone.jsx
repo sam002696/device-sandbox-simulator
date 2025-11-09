@@ -62,9 +62,9 @@ const WorkspaceDropZone = ({ children }) => {
               animate={{ opacity: 0.35 }}
               exit={{ opacity: 0 }}
             >
-              <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide">
-                {/* Dropping to load into workspace */}
-              </div>
+              {/* <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide"> */}
+                
+              {/* </div> */}
             </motion.div>
           )}
         </AnimatePresence>
