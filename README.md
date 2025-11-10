@@ -40,9 +40,9 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 
 ## Tech Stack
 
-- **Frontend:** React (Vite), Redux Toolkit, `@dnd-kit/core`, Tailwind CSS, Axios
+- **Frontend:** React (Vite), Redux Toolkit, `react-dnd`, Tailwind CSS, Axios
 - **Backend:** Laravel (PHP 8.2), MySQL 8
-- **Infra/Deploy:** Netlify (frontend), EC2 Instance (Ubuntu) (backend)
+- **Deploy:** Netlify (frontend), EC2 Instance (Ubuntu) (backend)
 
 ---
 
@@ -308,8 +308,8 @@ On error, remove temp & show a toast.
 
 **Frontend: Netlify**
 - Build command: `npm run build`
-- Publish directory: `device-sandbox-frontend/dist` (if building from monorepo, set base)
-- Change UrlBuilder API URL → production API URL (e.g LIVE URL)
+- Published directory: `device-sandbox-frontend/dist`
+- Changed UrlBuilder API URL → production API URL (e.g LIVE URL)
 
 **Backend: AWS EC2**
 
