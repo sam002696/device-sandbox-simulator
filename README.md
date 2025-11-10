@@ -50,20 +50,23 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 
 ```
 repo-root/
-├─ frontend/
+├─ device-sandbox-frontend/
 │  ├─ src/
 │  │  ├─ components/
-│  │  │  ├─ sandbox/       # Sidebar, Topbar, WelcomeScreen
-│  │  │  └─ ui/            # Button, Input, Modal, Toast, etc.
-│  │  ├─ pages/            # FanSandbox, LightSandbox, Welcome
+│  │  │  ├─ dnd/           # CustomDragLayer, Draggables, WorkspaceDropZone
+│  │  │  ├─ fan/           # FanCanvas, FanControls, FanVisual
+│  │  │  ├─ light/         # LightCanvas, LightControls, LightVisual
+│  │  │  ├─ sandbox/       # Sidebar, MainContent, TopBar
+│  │  │  └─ ui/            # Button, Input, Modal, Toast, DeviceSwitch.
+│  │  ├─ pages/            # FanSandbox, LightSandbox, WelcomeScreen, NotFound
 │  │  ├─ redux/
 │  │  │  ├─ fan/
 │  │  │  ├─ light/
 │  │  │  ├─ global/
-│  │  │  └─ shared/        # deviceSliceBase, thunks, toastSlice
-│  │  └─ services/         # apiService, presetService
+│  │  │  └─ shared/        # deviceSliceBase, presetThunks, toastSlice
+│  │  └─ services/         # apiService
 │  └─ ...
-└─ backend/
+└─ device-sandbox-backend/
    ├─ app/
    │  ├─ Http/Controllers/Api/
    │  ├─ Models/
@@ -123,11 +126,6 @@ cp .env.example .env
 npm install
 npm run dev
 # open http://localhost:5173
-```
-
-**Frontend `.env` (sample):**
-```dotenv
-VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1
 ```
 
 ---
