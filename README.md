@@ -308,7 +308,7 @@ On error, remove temp & show a toast.
 
 **Frontend: Netlify**
 - Build command: `npm run build`
-- Publish directory: `frontend/dist` (if building from monorepo, set base)
+- Publish directory: `device-sandbox-frontend/dist` (if building from monorepo, set base)
 - Change UrlBuilder API URL → production API URL (e.g LIVE URL)
 
 **Backend: AWS EC2**
