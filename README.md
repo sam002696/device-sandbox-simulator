@@ -1,45 +1,12 @@
 # Device Sandbox Simulator
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/0b000000-0000-0000-0000-000000000000/deploy-status)](#)
-[![Made with React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](#)
-[![Redux Toolkit](https://img.shields.io/badge/Redux%20Toolkit-%F0%9F%94%AE-764ABC?logo=redux&logoColor=white)](#)
-[![DnD Kit](https://img.shields.io/badge/@dnd--kit-core-Drag%20%26%20Drop-5b21b6)](#)
-[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38B2AC?logo=tailwind-css&logoColor=white)](#)
-[![Laravel](https://img.shields.io/badge/Laravel-10-FF2D20?logo=laravel&logoColor=white)](#)
-[![MySQL](https://img.shields.io/badge/MySQL-8-4479A1?logo=mysql&logoColor=white)](#)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
-
-Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into the canvas, tweak controls, and **save reusable presets** that persist via a Laravel API.
+Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into the canvas, tweak controls, and save reusable presets that persist via a Laravel API with Optimistic UI updates — presets appear instantly while syncing in the background for a seamless user experience.
 
 **Live Demo:** https://device-sandbox-simulator.netlify.app/
 
 ---
 
-## Table of Contents
-
-- [Features](#-features)
-- [Screens](#-screens)
-- [Tech Stack](#-tech-stack)
-- [Project Structure](#-project-structure)
-- [Local Development](#-local-development)
-  - [Backend (Laravel)](#1-backend-laravel)
-  - [Frontend (React + Vite)](#2-frontend-react--vite)
-- [Environment Variables](#-environment-variables)
-- [Database Schema](#-database-schema)
-- [API Reference](#-api-reference)
-- [Frontend Architecture](#-frontend-architecture-notes)
-- [Drag & Drop Flow](#-drag--drop-dnd-kit)
-- [Deployment Notes](#-deployment)
-- [Testing (Manual)](#-testing-manual)
-- [Troubleshooting](#-troubleshooting)
-- [Roadmap](#-roadmap)
-- [Contributing](#-contributing)
-- [License](#-license)
-- [Author](#-author)
-
----
-
-## ✨ Features
+## Features
 
 ### Device Controls
 - **Light:** Power toggle, color temperature, brightness (0–100), live visual glow.
@@ -63,7 +30,7 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 
 ---
 
-##  Screens
+## Screens
 
 - **Sidebar:** device shortcuts + saved presets  
 - **Topbar:** context actions (Clear, Save Preset)  
@@ -71,7 +38,7 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
 - **Frontend:** React (Vite), Redux Toolkit, `@dnd-kit/core`, Tailwind CSS, Axios
 - **Backend:** Laravel (PHP 8.2), MySQL 8
@@ -79,7 +46,7 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 repo-root/
@@ -165,14 +132,13 @@ VITE_API_BASE_URL=http://127.0.0.1:8000/api/v1
 
 ---
 
-## 🔐 Environment Variables
+## Environment Variables
 
-- **Frontend:** `VITE_API_BASE_URL` → points to your Laravel API base (e.g., `http://127.0.0.1:8000/api/v1` or production API URL).
-- **Backend:** Standard Laravel `.env` for APP/DB; configure CORS to allow the Netlify domain in production.
+- **Backend:** Standard Laravel `.env` for APP/DB;
 
 ---
 
-## 🗃️ Database Schema
+## Database Schema
 
 **Table: `presets`** — stores each preset with embedded device configuration in a JSON column.
 
@@ -224,7 +190,7 @@ INSERT INTO `presets` (`name`, `device`, `created_at`, `updated_at`) VALUES
 
 ## API Reference
 
-**Base URL:** `${VITE_API_BASE_URL}` (e.g., `http://127.0.0.1:8000/api/v1`)
+**Base URL:** (`http://127.0.0.1:8000/api/v1`)
 
 ### `GET /presets`
 Fetch presets.
@@ -331,7 +297,7 @@ On error, remove temp & show a toast.
 
 ---
 
-## Drag & Drop (DnD Kit)
+## Drag & Drop (react-dnd)
 
 - Sidebar items (devices & presets) are draggable **sources**.
 - The welcome canvas is a **droppable** target.
@@ -345,13 +311,19 @@ On error, remove temp & show a toast.
 **Frontend: Netlify**
 - Build command: `npm run build`
 - Publish directory: `frontend/dist` (if building from monorepo, set base)
-- Env: `VITE_API_BASE_URL` → production API URL
+- Change UrlBuilder API URL → production API URL (e.g LIVE URL)
 
-**Backend: AWS EC2 / VPS**
-- PHP 8.2+, Nginx/Apache, MySQL
-- Set correct `APP_URL` & CORS
-- `php artisan migrate --force`
-- Secure `.env` and storage permissions
+**Backend: AWS EC2**
+
+- Hosted **Laravel backend** and **MySQL database** on an **AWS EC2 instance**.
+- Used **Nginx** as the web server with **PHP 8.2+** and **Certbot** for SSL.
+- Since EC2 instances by default expose an HTTP URL (with an IP address), and the frontend (on Netlify) runs over HTTPS, this caused **mixed-content issues** when calling the API.
+- To solve this:
+  1. Created a **subdomain** (`api.coveysoft.dev`) from the main domain(`conveysoft.dev`(**my own domain**)).
+  2. **Bound** that subdomain to the EC2 Nginx server configuration.
+  3. **Issued an SSL certificate** with **Certbot**, converting the API endpoint to **HTTPS**.
+  4. Updated `APP_URL` in the Laravel `.env` and the frontend `UrlBuilder file` to use `https://api.coveysoft.dev`.
+- Final setup allows **secure communication** between the HTTPS frontend and HTTPS backend without browser security warnings.
 
 ---
 
@@ -367,5 +339,4 @@ On error, remove temp & show a toast.
 ## Author
 
 **Sadman Sakib (Sami)** — Software Engineer  
-**Live App:** https://device-sandbox-simulator.netlify.app/  
-
+**Live App:** https://device-sandbox-simulator.netlify.app/
