@@ -26,6 +26,7 @@ const Sidebar = ({ slice }) => {
     dispatch(getPresets(slice || "")());
   }, [dispatch, slice]);
 
+  // Navigation items for the sidebar
   const navItems = [
     { name: "Light", path: "/light", icon: LightbulbIcon, deviceType: "light" },
     { name: "Fan", path: "/fan", icon: FanIcon, deviceType: "fan" },

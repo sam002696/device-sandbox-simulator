@@ -25,6 +25,7 @@ const LightControls = () => {
         <span className="text-sm text-gray-300 block mb-2">
           Color Temperature
         </span>
+        {/* Color temperature options */}
         <div className="flex  gap-2">
           {colorOptions.map((c) => (
             <button
@@ -48,6 +49,7 @@ const LightControls = () => {
         <span className="text-sm text-gray-300">Brightness</span>
         <span className="text-sm text-gray-400">{brightness}%</span>
       </div>
+      {/* Brightness slider */}
       <input
         type="range"
         min={0}

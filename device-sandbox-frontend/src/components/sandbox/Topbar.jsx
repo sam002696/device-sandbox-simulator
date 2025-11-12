@@ -12,16 +12,20 @@ import {
 const Topbar = ({ setSidebarOpen, slice = "" }) => {
   const dispatch = useDispatch();
 
+  // Selecting device state based on the provided slice
   const deviceState = useSelector((state) =>
     slice ? state[slice] : { showActions: false, showModal: false }
   );
+  // Destructuring state properties
   const { showActions, showModal } = deviceState;
 
+  // Handler to clear device settings
   const handleClear = () => {
     if (slice === "fan") dispatch(clearFan());
     else if (slice === "light") dispatch(clearLight());
   };
 
+  // Handler to open the modal for saving presets
   const handleOpenModal = () => {
     if (slice === "fan") dispatch(openFanModal());
     else if (slice === "light") dispatch(openLightModal());
@@ -40,6 +44,7 @@ const Topbar = ({ setSidebarOpen, slice = "" }) => {
         Testing Canvas
       </h1>
 
+      {/* Action buttons */}
       {showActions && (
         <div className="flex items-center gap-3 absolute right-4 top-0">
           <Button label="Clear" variant="secondary" onClick={handleClear} />
@@ -51,6 +56,7 @@ const Topbar = ({ setSidebarOpen, slice = "" }) => {
         </div>
       )}
 
+      {/* Modal for saving presets */}
       {showModal && <Modal slice={slice} />}
     </header>
   );

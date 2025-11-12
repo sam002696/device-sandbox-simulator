@@ -32,7 +32,9 @@ const CustomDragLayer = () => {
 
   return (
     <div className="pointer-events-none fixed top-0 left-0 h-full w-1/10 z-9999">
-      <div style={getItemStyles(currentOffset)}>
+      {/* Dragged item preview */}
+      <div style={getItemStyles(currentOffset)}> 
+        {/* Motion wrapper */}
         <motion.div
           initial={{ scale: 0.92, rotate: -2, opacity: 0.9 }}
           animate={{ scale: 1, rotate: 0, opacity: 1 }}

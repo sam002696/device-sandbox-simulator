@@ -66,6 +66,7 @@ export function DraggablePresetItem({ preset, children }) {
         label: preset.name,
         deviceType: String(preset?.type || "").toLowerCase(), // "fan" | "light"
       },
+      // Collecting drag state
       collect: (monitor) => ({ isDragging: monitor.isDragging() }),
       canDrag: () => true,
 
@@ -75,12 +76,14 @@ export function DraggablePresetItem({ preset, children }) {
 
         const t = dragItem?.deviceType;
         if (t === "fan") {
+          // Applying fan preset and navigating to fan page
           dispatch(applyFanPreset(dragItem.preset));
           dispatch(setFanTab("savedPreset"));
           navigate("/fan");
           return;
         }
         if (t === "light") {
+          // Applying light preset and navigating to light page
           dispatch(applyLightPreset(dragItem.preset));
           dispatch(setLightTab("savedPreset"));
           navigate("/light");

@@ -5,7 +5,6 @@ import { useDrop } from "react-dnd";
 import { motion, AnimatePresence } from "framer-motion";
 import { ItemTypes } from "../../constants/itemType";
 
-
 const WorkspaceDropZone = ({ children }) => {
   const [dropPulse, setDropPulse] = useState(false);
 
@@ -63,12 +62,13 @@ const WorkspaceDropZone = ({ children }) => {
               exit={{ opacity: 0 }}
             >
               {/* <div className="rounded-2xl border border-blue-400/30 bg-blue-400/10 px-4 py-2 text-sm tracking-wide"> */}
-                
+
               {/* </div> */}
             </motion.div>
           )}
         </AnimatePresence>
 
+        {/* Drop pulse effect */}
         <AnimatePresence>
           {dropPulse && (
             <motion.span

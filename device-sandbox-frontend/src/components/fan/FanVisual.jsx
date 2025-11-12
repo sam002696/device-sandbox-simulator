@@ -15,6 +15,7 @@ const FanVisual = () => {
     return `${duration}s`;
   }, [speed]);
 
+  // Determining if the fan should spin
   const shouldSpin = isOn && speed > 0;
 
   return (
