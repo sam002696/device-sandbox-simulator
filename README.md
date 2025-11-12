@@ -15,7 +15,9 @@ Simulate smart devices (Fan & Light) inside a sandbox. Drag devices/presets into
 ### Presets
 - Save current device state with a custom name.
 - Instantly apply presets (sidebar click or drag-and-drop).
-- **Optimistic UI:** Preset appears immediately; reconciled after API response.
+- After saving, the UI automatically switches to the related device tab (Fan or Light) and highlights the newly saved preset as active.
+- On the home screen (/), all presets are shown together with no active tab, and clicking any preset or device loads the matching view, showing its own    saved presets and active device indicator.
+- **Optimistic UI**: Preset appears immediately; reconciled after API response.
 
 ### Drag & Drop
 - Devices & presets in the sidebar are draggable.
@@ -288,10 +290,10 @@ Create a new preset.
   - Also dispatches toast notifications.
 
 ### Optimistic UI Strategy
-On “Save Preset”, generate a `tempId` and push `{ id: tempId, ..., isTemp: true }`.  
+On “Save Preset”, generated a `tempId` and pushed `{ id: tempId, ..., isTemp: true }`.  
 UI uses the temp item immediately (no flicker).  
-When API returns, replace the temp by id and keep `activePresetId` in sync.  
-On error, remove temp & show a toast.
+When API returns, replaced the temp by id and keep `activePresetId` in sync.  
+On error, removed temp & showed a toast.
 
 ---
 
