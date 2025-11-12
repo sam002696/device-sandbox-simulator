@@ -11,6 +11,7 @@ use Illuminate\Validation\ValidationException;
 // Preset management controller
 class PresetController extends Controller
 {
+    // Preset service instance
     protected $presetService;
 
     // Dependency injection of PresetService
@@ -34,6 +35,7 @@ class PresetController extends Controller
     public function store(Request $request)
     {
         try {
+            // Validating incoming request data
             $validated = $request->validate([
                 'name' => 'required|string|max:255',
                 'device' => 'required|array',
@@ -41,6 +43,7 @@ class PresetController extends Controller
                 'device.settings' => 'required|array',
             ]);
 
+            // Creating a new preset using the validated data
             return $this->presetService->createPreset($validated);
         } catch (ValidationException $e) { // Handle validation errors
             return ApiResponseService::handleValidationError($e); // 422 Unprocessable Entity
